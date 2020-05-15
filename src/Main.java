@@ -18,6 +18,7 @@ public class Main {
         while (img.getWidth() > 2900 || img.getHeight() > 2900) {
             System.out.println("Sorry, " + imgFile.getName() + " is too large");
             imgFile = getImageInput("Image: " );
+            img = ImageIO.read(imgFile);
         }
 
         int iterations = getIntegerInput("How many iterations would you like to perform: ");
