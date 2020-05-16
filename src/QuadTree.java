@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class QuadTree {
     BufferedImage img;
@@ -87,7 +88,7 @@ public class QuadTree {
         colorError = Math.max(Math.max(northWest.colorError, northEast.colorError), Math.max(southWest.colorError, southEast.colorError));
     }
 
-    public void createQuadImage(BufferedImage oImg, String imgName) throws IOException {
+    public boolean createQuadImage(BufferedImage oImg, String imgName, boolean gif) throws IOException {
         if (northWest == null) {
             for (int y = yStart; y < yEnd; ++y) {
                 for (int x = xStart; x < xEnd; ++x) {
@@ -107,17 +108,25 @@ public class QuadTree {
             }
 
             if (isSouthEastMostQuad) {
-                File ofile = new File(imgName);
-                ImageIO.write(oImg, "jpg", ofile);
-                System.out.println("Created " + imgName);
+                File frameDir = new File(imgName.substring(0, imgName.length() - 7));
+                if ((gif && frameDir.exists()) || !gif) {
+                    File ofile = new File(imgName);
+                    ImageIO.write(oImg, "jpg", ofile);
+                    System.out.println("Created " + imgName);
+                    return true;
+                }
+                else {
+                    System.out.println(imgName.substring(0, imgName.length() - 7) + " doesn't exist");
+                }
             }
         }
         else {
-            northWest.createQuadImage(oImg, imgName);
-            northEast.createQuadImage(oImg, imgName);
-            southWest.createQuadImage(oImg, imgName);
-            southEast.createQuadImage(oImg, imgName);
+            return northWest.createQuadImage(oImg, imgName, gif) ||
+            northEast.createQuadImage(oImg, imgName, gif) ||
+            southWest.createQuadImage(oImg, imgName, gif) ||
+            southEast.createQuadImage(oImg, imgName, gif);
         }
+        return false;
     }
 
     private boolean hasLargestError(QuadTree qt) {

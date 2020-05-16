@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        System.out.println("Running Quadpic...");
+        System.out.println("Running QuadImage...");
         long start = Instant.now().toEpochMilli();
 
         File imgFile = getImageInput("Image: ");
@@ -38,20 +38,25 @@ public class Main {
                 // First 9 seconds
                 if (i < 90) {
                     String fname = createImageFileName(imgFile.getName(), imagesCreated);
-                    qt.createQuadImage(new BufferedImage(qt.img.getWidth(), qt.img.getHeight(), qt.img.getType()), fname);
-                    imagesCreated++;
+                    if (qt.createQuadImage(new BufferedImage(qt.img.getWidth(), qt.img.getHeight(), qt.img.getType()), fname, makeGif)) {
+                        imagesCreated++;
+                    }
                 }
                 // Next 9 seconds
                 else if (i < 450 && i%4 == 0) {
                     String fname = createImageFileName(imgFile.getName(), imagesCreated);
-                    qt.createQuadImage(new BufferedImage(qt.img.getWidth(), qt.img.getHeight(), qt.img.getType()), fname);
-                    imagesCreated++;
+                    if (qt.createQuadImage(new BufferedImage(qt.img.getWidth(), qt.img.getHeight(), qt.img.getType()), fname, makeGif)) {
+                        imagesCreated++;
+                    }
                 }
                 // Final 9 seconds
                 else if (i >= 450 && i < 1800 && i%15 == 0) {
                     String fname = createImageFileName(imgFile.getName(), imagesCreated);
-                    qt.createQuadImage(new BufferedImage(qt.img.getWidth(), qt.img.getHeight(), qt.img.getType()), fname);
-                    imagesCreated++;
+
+                    // createQuadImage will create an image in frames folder, and if successful will increase image count
+                    if (qt.createQuadImage(new BufferedImage(qt.img.getWidth(), qt.img.getHeight(), qt.img.getType()), fname, makeGif)) {
+                        imagesCreated++;
+                    }
                 }
             }
         }
@@ -60,13 +65,15 @@ public class Main {
             // 3 second pause before looping
             for (int i = 0; i < 30; ++i) {
                 String fname = createImageFileName(imgFile.getName(), imagesCreated);
-                qt.createQuadImage(new BufferedImage(qt.img.getWidth(), qt.img.getHeight(), qt.img.getType()), fname);
-                imagesCreated++;
+                if (qt.createQuadImage(new BufferedImage(qt.img.getWidth(), qt.img.getHeight(), qt.img.getType()), fname, makeGif)) {
+                    imagesCreated++;
+                }
             }
         }
 
-        qt.createQuadImage(new BufferedImage(qt.img.getWidth(), qt.img.getHeight(), qt.img.getType()), "quadimages/" + iterations + imgFile.getName());
-        imagesCreated++;
+        if (qt.createQuadImage(new BufferedImage(qt.img.getWidth(), qt.img.getHeight(), qt.img.getType()), "quadimages/" + iterations + imgFile.getName(), false)) {
+            imagesCreated++;
+        }
 
         long end = Instant.now().toEpochMilli();
         System.out.println("Created " +imagesCreated + " images in " + formatSeconds(start, end));
