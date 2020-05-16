@@ -21,13 +21,14 @@ public class Main {
             img = ImageIO.read(imgFile);
         }
 
-        int iterations = getIntegerInput("How many iterations would you like to perform: ");
+        boolean gridLines = getBooleanInput("Would you like black grid lines around each quadrant (y or n): ");
 
+        int iterations = getIntegerInput("How many iterations would you like to perform: ");
         boolean makeGif = getBooleanInput("Would you like to create up to 300 images for a gif (y or n): ");
 
         start = Instant.now().toEpochMilli();
 
-        QuadTree qt = new QuadTree(img, 0, img.getWidth(), 0, img.getHeight(), true, 1);
+        QuadTree qt = new QuadTree(img, 0, img.getWidth(), 0, img.getHeight(), true, 1, gridLines);
         int imagesCreated = 0;
 
         for (int i = 0; i < iterations; ++i) {
@@ -126,7 +127,7 @@ public class Main {
     }
 
     public static String createImageFileName(String name, int i) {
-        String fname = name;
+        String fname = "frames/" + name;
         int pos = fname.lastIndexOf(".");
         if (pos > 0) {
             fname = fname.substring(0, pos);

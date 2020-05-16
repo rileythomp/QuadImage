@@ -1,5 +1,5 @@
-echo Creating ${1}.gif...
-convert -loop 0 -delay 10 ${1}/{0..2}{0..9}{0..9}\.jpg quadgifs/${1}.gif
-rm ${1}/*
-echo Removed ${1}/\*
-echo Created ${1}.gif
+echo Creating gifs/${1}.gif...
+convert -resize 50% -loop 0 -delay 10 frames/${1}/{0..2}{0..9}{0..9}\.jpg gifs/${1}.gif
+rm frames/${1}/*
+echo Removed frames/${1}/\*
+echo Created gifs/${1}.gif

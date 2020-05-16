@@ -28,8 +28,12 @@ public class QuadTree {
     public int avgBlue;
     public double colorError;
 
-    public QuadTree(BufferedImage image, int x0, int x1, int y0, int y1, boolean se, int l) {
+    boolean gridLines;
+
+    public QuadTree(BufferedImage image, int x0, int x1, int y0, int y1, boolean se, int l, boolean gl) {
         img = image;
+
+        gridLines = gl;
 
         level = l;
 
@@ -58,10 +62,10 @@ public class QuadTree {
             int xHalf = xStart + (xEnd - xStart)/2;
             int yHalf = yStart + (yEnd - yStart)/2;
 
-            northWest = new QuadTree(img, xStart, xHalf, yStart, yHalf, false, level+1);
-            northEast = new QuadTree(img, xHalf, xEnd, yStart, yHalf, false, level+1);
-            southWest = new QuadTree(img, xStart, xHalf, yHalf, yEnd, false, level+1);
-            southEast = new QuadTree(img, xHalf, xEnd, yHalf, yEnd, isSouthEastMostQuad, level+1);
+            northWest = new QuadTree(img, xStart, xHalf, yStart, yHalf, false, level+1, gridLines);
+            northEast = new QuadTree(img, xHalf, xEnd, yStart, yHalf, false, level+1, gridLines);
+            southWest = new QuadTree(img, xStart, xHalf, yHalf, yEnd, false, level+1, gridLines);
+            southEast = new QuadTree(img, xHalf, xEnd, yHalf, yEnd, isSouthEastMostQuad, level+1, gridLines);
 
             isSouthEastMostQuad = false;
         }
@@ -87,10 +91,18 @@ public class QuadTree {
         if (northWest == null) {
             for (int y = yStart; y < yEnd; ++y) {
                 for (int x = xStart; x < xEnd; ++x) {
-                    int avgColor = avgRed;
-                    avgColor = (avgColor << 8) + avgGreen;
-                    avgColor = (avgColor << 8) + avgBlue;
-                    oImg.setRGB(x, y, avgColor);
+                    if (gridLines && ((xEnd - xStart) > 2) && ((yEnd - yStart) > 2) && (x == xStart || x == xEnd - 1 || y == yStart || y == yStart - 1)) {
+                        int avgColor = 0;
+                        avgColor = (avgColor << 8) + 0;
+                        avgColor = (avgColor << 8) + 0;
+                        oImg.setRGB(x, y, avgColor);
+                    }
+                    else {
+                        int avgColor = avgRed;
+                        avgColor = (avgColor << 8) + avgGreen;
+                        avgColor = (avgColor << 8) + avgBlue;
+                        oImg.setRGB(x, y, avgColor);
+                    }
                 }
             }
 
