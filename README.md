@@ -1,5 +1,5 @@
 # QuadImage
-Image manipulation with quadtrees. The image is split into 4 quadrants, each of which is given an average colour based on the colours of the pixels in that quadrant. The quadrant with the largest average colour error (a metric similar to standard deviation) relative to the number of times it has been split, will then again be split into 4 quadrants. This process is repeated an arbitrary number of times, continuously increasing the clarity of the image.
+Image manipulation with quadtrees. The image is split into 4 quadrants, each of which is given an average colour based on the colours of the pixels in that quadrant. The quadrant with the largest average colour error (a metric similar to standard deviation), will then again be split into 4 quadrants. This process is repeated an arbitrary number of times, continuously increasing the clarity of the image.
 
 ![fieldgif](gifs/field.gif)
 
